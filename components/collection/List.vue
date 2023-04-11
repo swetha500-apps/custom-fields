@@ -1,6 +1,38 @@
 <template>
   <div>
-    <input ref="fileInput" type="file" @change="handleFileInputChange" />
+    <div class="flex justify-center align-middle">
+      <label
+        class="flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none"
+      >
+        <span class="flex items-center space-x-2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-6 h-6 text-gray-600"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+            />
+          </svg>
+          <span class="font-medium text-gray-600">
+            Drop files to Attach, or
+            <span class="text-blue-600 underline">browse</span>
+          </span>
+        </span>
+        <input
+          type="file"
+          name="file_upload"
+          class="hidden"
+          ref="fileInput"
+          @change="handleFileInputChange"
+        />
+      </label>
+    </div>
     <div v-if="file" class="filename">
       <button @click="open = true">{{ file.name }}</button>
     </div>
@@ -58,6 +90,7 @@
                       >
                       <div class="mt-2">
                         <div>
+                          <!-- <button class="close" @click="cancelImage">&times;</button> -->
                           <embed
                             :src="fileUrl"
                             type="application/pdf"
@@ -90,11 +123,12 @@ import {
 import { ExclamationTriangleIcon, XMarkIcon } from "@heroicons/vue/24/outline";
 const open = ref(false);
 const file = ref<File | null>(null);
-// Compute the URL for the selected file
+// const showModal = ref(false);
+
 const fileUrl = computed(() => {
   return file.value ? URL.createObjectURL(file.value) : "";
 });
-// Handle changes to the file input element and set the value of the file ref
+
 const handleFileInputChange = () => {
   const input = document.querySelector(
     'input[type="file"]'
@@ -103,6 +137,9 @@ const handleFileInputChange = () => {
     file.value = input.files[0];
   }
 };
-</script>
 
-<style scoped></style>
+const cancelImage = () => {
+  file.value = null;
+  open.value = false;
+};
+</script>
